@@ -35,6 +35,16 @@ export GEMINI_API_KEY=...   # your key; GEMINI_MODEL overrides the model
 python -m agent_prompt_versioning.demo
 ```
 
+Live mode is verified against the Gemini free tier (`gemini-3.5-flash-lite`,
+36 real calls): v1 scored 1.000 and was promoted; v2's bad line made the
+real model refuse the two valid refund cases (0.833) and rolled back — the
+regression is caught with a real model, not just the mock. One honest
+difference from mock mode: live v3 also rolled back (0.833) because the real
+model applied the identity check to two valid account requests
+(change-email, cancel), which the refusal classifier counts as not
+answering. The mock applies the line narrowly; the real model generalizes
+it — exactly the kind of behavior change prompt evals exist to surface.
+
 ## How it works
 
 ```mermaid
