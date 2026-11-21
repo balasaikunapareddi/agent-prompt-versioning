@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-prompt-versioning"
+version = "0.1.0"
+description = "LangGraph agent that versions system prompts, runs evals per version, promotes winners, and rolls back regressions — mock mode by default, no API key needed."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{ name = "Bala Sai Kunapareddi" }]
+dependencies = [
+    "langgraph>=0.2",
+    "langchain-core>=0.3",
+    "pydantic>=2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+live = ["langchain-google-genai>=2"]
+
+[project.scripts]
+prompt-versioning-demo = "agent_prompt_versioning.demo:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
