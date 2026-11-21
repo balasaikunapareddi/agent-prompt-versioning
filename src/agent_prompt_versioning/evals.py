@@ -135,7 +135,7 @@ def live_respond(prompt_text: str, request: str) -> str:
     from langchain_google_genai import ChatGoogleGenerativeAI
 
     model = ChatGoogleGenerativeAI(
-        model=os.environ.get("GEMINI_MODEL", "gemini-2.0-flash"),
+        model=os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite"),
         temperature=0,
     )
     reply = model.invoke(
