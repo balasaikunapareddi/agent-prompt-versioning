@@ -146,13 +146,14 @@ def run_lifecycle(
     author_note: str = "",
     parent: Optional[str] = None,
     run_id: Optional[str] = None,
+    checkpointer=None,
 ) -> dict:
     """Run one full lifecycle: draft → evaluate → compare → decide.
 
     Returns the final state (also persisted to ``<store>/runs/``).
     """
     run_id = run_id or f"run-{uuid.uuid4().hex[:8]}"
-    app = build_graph(store)
+    app = build_graph(store, checkpointer=checkpointer)
     final = app.invoke(
         {
             "prompt_text": prompt_text,

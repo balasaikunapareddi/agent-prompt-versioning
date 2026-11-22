@@ -5,4 +5,13 @@ Mock mode is the default (no API key, no network). Live mode is optional
 via the GEMINI_API_KEY environment variable.
 """
 
+from .agent import PromptVersioningAgent
+from .prompts import AGENT_SYSTEM_PROMPT
+
 __version__ = "0.1.0"
+
+__all__ = [
+    "AGENT_SYSTEM_PROMPT",
+    "PromptVersioningAgent",
+    "__version__",
+]

@@ -1,5 +1,12 @@
 """System prompts.
 
+All system / instruction prompt text lives here, in one dedicated
+module, so it is visible and inspectable without digging through
+agent code. Agent code imports these constants; it never defines
+prompt text inline. Tool descriptions required inline by the
+framework (tool schemas in ``tools.py``) stay with their tools, as
+the framework expects.
+
 Two kinds of prompt live here:
 
 1. ``AGENT_SYSTEM_PROMPT`` — the behavior-only system prompt for the
@@ -10,7 +17,9 @@ Two kinds of prompt live here:
 2. Seed prompts for the demo: versions of a customer-support agent's
    system prompt that get versioned, evaluated, promoted, and rolled
    back. ``V2_BAD_LINE`` is the one-line Friday tweak that breaks
-   Monday; ``V3_GOOD_LINE`` is a genuinely better line.
+   Monday; ``V3_GOOD_LINE`` is a genuinely better line. These are
+   versioned data fixtures — the prompts under management, not the
+   agent's own instructions.
 """
 
 AGENT_SYSTEM_PROMPT = """\

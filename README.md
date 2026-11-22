@@ -12,7 +12,7 @@ automatically, with a changelog entry that says why.
 
 ```bash
 pip install -e ".[dev]"     # mock mode: no API key, no network needed after install
-pytest -q                   # 33 tests, all offline
+pytest -q                   # 36 tests, all offline
 python -m agent_prompt_versioning.demo
 ```
 
@@ -72,6 +72,9 @@ flowchart LR
 - **Lifecycle graph** (`graph.py`) — draft → evaluate → compare →
   promote/rollback → changelog, with run state persisted per run
   (LangGraph checkpointer + a JSON snapshot under `<store>/runs/`).
+  Driven by `PromptVersioningAgent` (`agent.py`), which wires the
+  store, system prompt, and tools together; `run()` is one
+  lifecycle pass per candidate prompt.
 
 The agent's own system prompt (`prompts.py`) holds behavior only —
 "report scores exactly, never promote on vibes." Every checkable rule
@@ -107,6 +110,8 @@ including the full test suite.
 ```
 src/agent_prompt_versioning/
     prompts.py     agent system prompt (behavior only) + demo seed prompts
+    agent.py       PromptVersioningAgent — wires store, system prompt,
+                   tools, and the lifecycle graph; run() is the agent loop
     store.py       file-backed version store + changelog + run snapshots
     mock_agent.py  deterministic mock behavior (function of prompt text)
     evals.py       12-case eval set, scoring, optional live responder
@@ -114,7 +119,7 @@ src/agent_prompt_versioning/
     tools.py       typed tool definitions (pydantic schemas)
     graph.py       LangGraph lifecycle state machine
     demo.py        one-command demo
-tests/             store, evals, rules, graph, demo — all offline
+tests/             agent, store, evals, rules, graph, demo — all offline
 ```
 
 ## License

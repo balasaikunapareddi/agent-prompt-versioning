@@ -19,7 +19,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from .graph import run_lifecycle
+from .agent import PromptVersioningAgent
 from .prompts import V1_PROMPT, V2_BAD_LINE, V3_GOOD_LINE
 from .store import VersionStore
 
@@ -37,17 +37,17 @@ def _show(label: str, result: dict) -> None:
 
 def run_demo(store_dir: str | Path) -> VersionStore:
     store = VersionStore(store_dir)
+    agent = PromptVersioningAgent(store)
     print("== Prompt versioning demo ==\n")
 
     print("Step 1: ship the good v1 prompt")
-    r1 = run_lifecycle(store, V1_PROMPT, author_note="initial support prompt")
+    r1 = agent.run(V1_PROMPT, author_note="initial support prompt")
     _show("v1", r1)
 
     print("\nStep 2: Friday — someone adds one line to v2:")
     print(f"    + {V2_BAD_LINE}")
     print("    (diff v1 -> v2 is one line; evals decide if it ships)")
-    r2 = run_lifecycle(
-        store,
+    r2 = agent.run(
         V1_PROMPT.rstrip("\n") + "\n" + V2_BAD_LINE + "\n",
         author_note="tighten refund handling",
         parent="v1",
@@ -59,8 +59,7 @@ def run_demo(store_dir: str | Path) -> VersionStore:
 
     print("\nStep 3: a genuinely better line for v3:")
     print(f"    + {V3_GOOD_LINE}")
-    r3 = run_lifecycle(
-        store,
+    r3 = agent.run(
         V1_PROMPT.rstrip("\n") + "\n" + V3_GOOD_LINE + "\n",
         author_note="verify identity before sharing account details",
         parent="v1",
